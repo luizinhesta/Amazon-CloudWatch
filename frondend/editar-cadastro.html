@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Cadastro | CloudWatch</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="topnav">
+    <div class="container navwrap">
+      <a href="index.html">CloudWatch</a>
+      <div class="navlinks">
+        <a href="acesso.html">Acesso</a>
+        <a href="login.html" id="sairLink">Sair</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="auth-page">
+    <section class="panel">
+      <h1>Editar Cadastro</h1>
+      <form id="editarForm">
+        <div class="form-row">
+          <label for="nome">Nome</label>
+          <input id="nome" name="nome" type="text" required>
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required>
+        </div>
+        <div class="actions">
+          <button type="submit">Salvar alteracoes</button>
+          <button type="button" class="secondary" id="recarregarBtn">Recarregar dados</button>
+        </div>
+        <p id="msg" class="msg"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    requireAuth();
+
+    var form = document.getElementById("editarForm");
+    var msg = document.getElementById("msg");
+    var recarregarBtn = document.getElementById("recarregarBtn");
+    var sairLink = document.getElementById("sairLink");
+    var token = getToken();
+    var user = getUser();
+    var userId = user.id || user.userId;
+
+    async function carregarUsuario() {
+      if (!userId) {
+        msg.className = "msg error";
+        msg.textContent = "Sessao sem userId. Faca login novamente.";
+        return;
+      }
+      msg.className = "msg";
+      msg.textContent = "Carregando dados...";
+      try {
+        var data = await apiRequest(window.APP_CONFIG.endpoints.usuario + "/" + userId, "GET", null, token);
+        form.nome.value = data.nome || "";
+        form.email.value = data.email || "";
+        msg.className = "msg success";
+        msg.textContent = "Dados carregados.";
+      } catch (error) {
+        msg.className = "msg error";
+        msg.textContent = error.message;
+      }
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      if (!userId) return;
+
+      msg.className = "msg";
+      msg.textContent = "Salvando alteracoes...";
+
+      var body = {
+        nome: form.nome.value.trim(),
+        email: form.email.value.trim()
+      };
+
+      try {
+        var data = await apiRequest(window.APP_CONFIG.endpoints.usuario + "/" + userId, "PUT", body, token);
+        saveSession({
+          token: token,
+          user: {
+            id: userId,
+            nome: data.nome || body.nome,
+            email: data.email || body.email
+          }
+        });
+        msg.className = "msg success";
+        msg.textContent = "Cadastro atualizado. Redirecionando...";
+        setTimeout(function () {
+          window.location.href = "acesso.html";
+        }, 800);
+      } catch (error) {
+        msg.className = "msg error";
+        msg.textContent = error.message;
+      }
+    });
+
+    recarregarBtn.addEventListener("click", carregarUsuario);
+    sairLink.addEventListener("click", function () {
+      clearSession();
+    });
+
+    carregarUsuario();
+  </script>
+</body>
+</html>

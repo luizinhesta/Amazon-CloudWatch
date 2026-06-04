@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro | CloudWatch</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="topnav">
+    <div class="container navwrap">
+      <a href="index.html">CloudWatch</a>
+      <div class="navlinks">
+        <a href="login.html">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="auth-page">
+    <section class="panel">
+      <h1>Cadastro</h1>
+      <form id="cadastroForm">
+        <div class="form-row">
+          <label for="nome">Nome</label>
+          <input id="nome" name="nome" type="text" required>
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required>
+        </div>
+        <div class="form-row">
+          <label for="senha">Senha</label>
+          <input id="senha" name="senha" type="password" minlength="6" required>
+        </div>
+        <div class="actions">
+          <button type="submit">Cadastrar</button>
+        </div>
+        <p id="msg" class="msg"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    var form = document.getElementById("cadastroForm");
+    var msg = document.getElementById("msg");
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      msg.className = "msg";
+      msg.textContent = "Criando cadastro...";
+
+      var body = {
+        nome: form.nome.value.trim(),
+        email: form.email.value.trim(),
+        senha: form.senha.value
+      };
+
+      try {
+        await apiRequest(window.APP_CONFIG.endpoints.cadastro, "POST", body);
+        msg.className = "msg success";
+        msg.textContent = "Cadastro criado. Redirecionando para login...";
+        setTimeout(function () {
+          window.location.href = "login.html";
+        }, 1200);
+      } catch (error) {
+        msg.className = "msg error";
+        msg.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>

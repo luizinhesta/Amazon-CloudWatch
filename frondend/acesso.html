@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Area do Usuario | CloudWatch</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="topnav">
+    <div class="container navwrap">
+      <a href="index.html">CloudWatch</a>
+      <div class="navlinks">
+        <a href="editar-cadastro.html">Editar Cadastro</a>
+        <a href="login.html" id="sairLink">Sair</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="auth-page">
+    <section class="panel">
+      <h1>Area do Usuario</h1>
+      <p id="welcome"></p>
+      <p id="emailInfo"></p>
+      <p class="msg success">Seja bem-vindo(a)! Voce entrou na area restrita apos o login.</p>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    requireAuth();
+
+    var user = getUser();
+    var userId = user.id || user.userId;
+    var welcome = document.getElementById("welcome");
+    var emailInfo = document.getElementById("emailInfo");
+    var sairLink = document.getElementById("sairLink");
+
+    if (!userId) {
+      clearSession();
+      window.location.href = "login.html";
+    }
+
+    welcome.textContent = "Ola, " + (user.nome || user.email || "usuario") + ".";
+    emailInfo.textContent = "Email: " + (user.email || "nao informado");
+
+    sairLink.addEventListener("click", function () {
+      clearSession();
+    });
+  </script>
+</body>
+</html>

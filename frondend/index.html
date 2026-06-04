@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon CloudWatch | Monitoramento AWS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="topnav">
+    <div class="container navwrap">
+      <a href="index.html" class="brand">
+        <img src="imagem/logo.png" alt="Logo CloudWatch" class="brand-logo">
+        <span>CloudWatch</span>
+      </a>
+      <div class="navlinks">
+        <span id="usuarioLogado" class="usuario-logado" style="display:none;"></span>
+        <a id="acessoLink" href="acesso.html" style="display:none;">Acesso</a>
+        <a id="sairLink" href="login.html" style="display:none;">Sair</a>
+        <a id="loginLink" href="login.html">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <p class="tag">AWS - Observabilidade</p>
+      <h1>Amazon CloudWatch</h1>
+      <p class="subtitle">
+        Monitore aplicacoes, infraestrutura e logs em tempo real para manter seus sistemas saudaveis na AWS.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <section id="sobre" class="section">
+      <div class="container">
+        <h2>O que é o CloudWatch?</h2>
+        <p>
+          O Amazon CloudWatch e o servico de monitoramento e observabilidade da AWS. Ele coleta metricas, logs e eventos
+          de servicos em nuvem para ajudar equipes a detectar falhas, criar alertas e tomar decisoes com base em dados.
+        </p>
+      </div>
+    </section>
+
+    <section id="recursos" class="section alt">
+      <div class="container grid">
+        <article class="card">
+          <h3>Metricas</h3>
+          <p>Acompanhe CPU, memoria, latencia, trafego e outros indicadores dos seus recursos em tempo real.</p>
+        </article>
+        <article class="card">
+          <h3>Logs</h3>
+          <p>Armazene, pesquise e analise logs de aplicacoes, Lambda, EC2, API Gateway e outros servicos.</p>
+        </article>
+        <article class="card">
+          <h3>Dashboards</h3>
+          <p>Monte paineis visuais personalizados para acompanhar a saude e o desempenho do ambiente.</p>
+        </article>
+        <article class="card">
+          <h3>Monitoramento da Arquitetura</h3>
+          <p>Tenha visao centralizada de toda a arquitetura AWS com alarmes, eventos e correlacao entre servicos.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Site estático para hospedagem em bucket S3 • Amazon CloudWatch</p>
+    </div>
+  </footer>
+  <script src="js/auth.js"></script>
+  <script>
+    var usuarioLogado = document.getElementById("usuarioLogado");
+    var acessoLink = document.getElementById("acessoLink");
+    var sairLink = document.getElementById("sairLink");
+    var loginLink = document.getElementById("loginLink");
+    var user = getUser();
+    var token = getToken();
+
+    if (token && (user.nome || user.email)) {
+      usuarioLogado.style.display = "inline";
+      usuarioLogado.textContent = "Usuario: " + (user.nome || user.email);
+      acessoLink.style.display = "inline";
+      sairLink.style.display = "inline";
+      loginLink.style.display = "none";
+    } else {
+      usuarioLogado.style.display = "none";
+      acessoLink.style.display = "none";
+      sairLink.style.display = "none";
+      loginLink.style.display = "inline";
+    }
+
+    sairLink.addEventListener("click", function () {
+      clearSession();
+    });
+  </script>
+</body>
+</html>
