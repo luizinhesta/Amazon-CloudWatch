@@ -402,7 +402,7 @@ Neste vídeo são apresentados os monitoramentos disponíveis nos principais ser
 
 ## ▶️ Vídeo do Projeto
 
-Youtube: https://youtu.be/u-ZyWuK3RKQ
+Youtube: https://youtu.be/CuBdO9cftM0
 
 Linkedin: https://www.linkedin.com/in/luiz-inhesta-341b4b311/
 
